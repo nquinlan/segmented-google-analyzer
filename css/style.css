@@ -1,0 +1,60 @@
+#toplevel_page_segmented-google-analyzer div.wp-menu-image {padding:0;width:16px;height:16px;margin:7px 5px 0 6px;background:url(../img/icon-sprites.png) 0 0 no-repeat;background-size:31px 14px;}
+#toplevel_page_segmented-google-analyzer:hover div.wp-menu-image, #toplevel_page_segmented-google-analyzer.wp-menu-open div.wp-menu-image {background-position:-15px 0}
+#toplevel_page_segmented-google-analyzer div.wp-menu-image img {display:none}
+
+#icon-segmented-google-analyzer { background: url(http://localhost/~nick/wordpress/wp-content/plugins/segmented-google-analyzer//img/icon-gray.png) no-repeat 1px 1px; }
+
+.sendgrid_sga .timeframe {
+	float: right;
+}
+
+.sendgrid_sga .timeframe .datepicker {
+	width: 100px;
+	text-align: center;
+}
+
+.sendgrid_sga h3 {
+	clear: both;
+}
+
+.sendgrid_sga .download {
+	float: right;
+	margin-top: 3px;
+}
+
+.sendgrid_sga.leaderboard table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.sendgrid_sga.leaderboard table td {
+	padding: 3px;
+}
+
+.sendgrid_sga.leaderboard table .rank {
+	width: 30px;
+	text-align: left;
+}
+
+.sendgrid_sga.leaderboard table .stats {
+	width: 80px;
+	text-align: right;
+}
+
+.sendgrid_sga.leaderboard table .mantime {
+	width: 150px;
+}
+
+
+.sendgrid_sga.leaderboard table tbody tr:nth-child(2n+1) {
+	background-color: #f8f8f8;
+}
+
+.sendgrid_sga.leaderboard table tbody tr:hover {
+	background-color: #eee;
+	-moz-transition: background-color 200ms;
+	-webkit-transition: background-color 200ms;
+	-o-transition: background-color 200ms;
+	transition: background-color 200ms;
+}
