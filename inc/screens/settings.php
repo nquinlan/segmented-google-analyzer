@@ -30,10 +30,12 @@ Nick of SendGrid
 				    $sendgrid_sga_client->setAccessToken($access_token);
 				    update_option('sendgrid_sga_authtoken', $auth_token);
 				    update_option('sendgrid_sga_accesstoken', $access_token);
+				    wp_schedule_single_event(time(), 'sendgrid_sga_analyzeposts_hook');
 				}
 			}
 
 			update_option('sendgrid_sga_profile', $_POST['profileid']);
+			update_option('sendgrid_sga_prepend_url', $_POST['prependurl']);
 
 			
 

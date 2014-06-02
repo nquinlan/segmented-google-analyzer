@@ -55,14 +55,14 @@
 	);
 
 	$top_users = $wpdb->get_results(
-		"SELECT `ID`, `post_author`, SUM(`pageviews`*`avg_time_on_page`) AS `mantime`, SUM(`visitors`) AS `visitors`, SUM(`pageviews`) AS `pageviews`, SUM(`avg_time_on_page`*`pageviews`)/SUM(`pageviews`) AS `avg_time_on_page`, SUM(`entrances`)/SUM(`pageviews`) AS `entrance_rate`, SUM(`exits`)/SUM(`pageviews`) AS `exit_rate`
+		"SELECT `ID`, `post_author`, SUM(`pageviews`*`avg_time_on_page`) AS `mantime`, SUM(`visits`) AS `visits`, SUM(`pageviews`) AS `pageviews`, SUM(`avg_time_on_page`*`pageviews`)/SUM(`pageviews`) AS `avg_time_on_page`, SUM(`entrances`)/SUM(`pageviews`) AS `entrance_rate`, SUM(`exits`)/SUM(`pageviews`) AS `exit_rate`
 			FROM `post_stats`
 			GROUP BY `post_author`
 			ORDER BY `mantime` DESC"
 	);
 
 	$top_posts = $wpdb->get_results(
-		"SELECT `ID`, `post_title`, `guid`, `post_author`, `pageviews`*`avg_time_on_page` AS `mantime`, `visitors`, `pageviews`, `avg_time_on_page`, `entrances`/`pageviews` AS `entrance_rate`, `exits`/`pageviews` AS `exit_rate`
+		"SELECT `ID`, `post_title`, `guid`, `post_author`, `pageviews`*`avg_time_on_page` AS `mantime`, `visits`, `pageviews`, `avg_time_on_page`, `entrances`/`pageviews` AS `entrance_rate`, `exits`/`pageviews` AS `exit_rate`
 			FROM `post_stats`
 			ORDER BY `mantime` DESC"
 	);
@@ -78,6 +78,8 @@
 		<input type="hidden" name="page" value="<?php echo $_GET['page']; ?>">
 		<input type="submit" class="button button-primary">
 	</form>
+	
+	<div class="clear"></div>
 
 	<h3>Top Users</h3>
 	<table>
@@ -94,8 +96,8 @@
 				<th title="Man time is the amount of time spent on the page across all people. It provides some measure of engagement, plus reach." class="tooltip sorted">
 					Man Time
 				</th>
-				<th title="Visitors is an aproximation of the number of individual people who viewed the site." class="tooltip">
-					Vistors
+				<th title="Visits is an aproximation of the number of individual sessions that viewed the page." class="tooltip">
+					Vists
 				</th>
 				<th title="Pageviews is the number of views a page saw in total." class="tooltip">
 					Pageviews
@@ -124,7 +126,7 @@
 					<?php echo time_format($user_info->mantime); ?>
 				</td>
 				<td>
-					<?php echo number_format($user_info->visitors); ?>
+					<?php echo number_format($user_info->visits); ?>
 				</td>
 				<td>
 					<?php echo number_format($user_info->pageviews); ?>
@@ -143,6 +145,7 @@
 		</tbody>
 	</table>
 
+	<div class="clear"></div>
 	<h3>Top Posts</h3>
 	<table>
 		<colgroup>
@@ -158,8 +161,8 @@
 				<th title="Man time is the amount of time spent on the page across all people. It provides some measure of engagement, plus reach." class="tooltip sorted">
 					Man Time
 				</th>
-				<th title="Visitors is an aproximation of the number of individual people who viewed the site." class="tooltip">
-					Vistors
+				<th title="Visits is an aproximation of the number of individual sessions that viewed the page." class="tooltip">
+					Vists
 				</th>
 				<th title="Pageviews is the number of views a page saw in total." class="tooltip">
 					Pageviews
@@ -188,7 +191,7 @@
 					<?php echo time_format($post_info->mantime); ?>
 				</td>
 				<td>
-					<?php echo number_format($post_info->visitors); ?>
+					<?php echo number_format($post_info->visits); ?>
 				</td>
 				<td>
 					<?php echo number_format($post_info->pageviews); ?>
@@ -207,8 +210,26 @@
 		</tbody>
 	</table>
 </div>
+
 <script>
 	jQuery(function ($) {
+		$.tablesorter.addParser({
+		 	id: 'labeledDuration',
+		 	is: function(s, table, cell) {
+				return Boolean(s.match(/^\s*(((\d{1,2}d\s+)?\d{1,2}h\s+)?\d{1,2}m\s+)?\d{1,2}s\s*$/)); 
+		 	},
+		 	format: function(s, table, cell, cellIndex) {
+				var times = s.match(/(\d{1,2})[dhms]/g);
+				times.reverse();
+				$.each(times, function(i, value) {
+					times[i] = parseInt(value);
+				});
+				var time = ( ( (times[3]*24 || 0) + (times[2] || 0) )*60 + (times[1] || 0) )*60 + times[0];
+		 	  return time;
+		 	},
+		 	parsed: true,
+		 	type: 'numeric'
+		});
 		$(".tooltip").qtip({
 			position: {
 				"my" : "bottom right",
@@ -232,6 +253,7 @@
 				var filename = tablename + "-" + $('.datepicker[name=period_start]').attr("value") + "-" + $('.datepicker[name=period_end]').attr("value") + ".csv"
 				saveAs(blob, filename);
 			});
+			$table.tablesorter();
 		});
 	});
 </script>

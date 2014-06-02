@@ -39,7 +39,14 @@
 				<th scope="row"><label for="profileid" id="profileidlabel">Google Analytics Profile ID</label></th>
 				<td>
 					<input name="profileid" type="text" id="profileid" aria-labelledby="profileidlabel" value="<?php echo get_option("sendgrid_sga_profile") ?>" />
-					<label for="infooter" class="description">Your Profile ID appears in the URL when using Google Analytics, <a href="http://productforums.google.com/d/msg/analytics/CIevQqWKElg/5NKOVPSekSwJ">find it using this Google Forum Post</a>.</label>
+					<label for="profileid" class="description">Your Profile ID appears in the URL when using Google Analytics, <a href="http://productforums.google.com/d/msg/analytics/CIevQqWKElg/5NKOVPSekSwJ">find it using this Google Forum Post</a>.</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="prependurl" id="prependurllabel">Prepend URL</label></th>
+				<td>
+					<input name="prependurl" type="text" id="prependurl" aria-labelledby="prependurllabel" value="<?php echo get_option("sendgrid_sga_prepend_url") ?>" />
+					<label for="prependurl" class="description">Most configurations of Google Analytics do not need this. However, yours may if you have URLs prepeneded with anything.</label>
 				</td>
 			</tr>
 		</table>

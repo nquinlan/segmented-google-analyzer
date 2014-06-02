@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<defs>
+<font id="sendgrid_sga-icon" horiz-adv-x="1000" >
+<font-face font-family="sendgrid_sga-icon" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="graph" unicode="&#xe801;" d="m1010 850l-1010 0 0-1010 1010 0 0 1010z m-66-945h-215v216l215 1 0-217z m-877 882h215v-217h-107-108l0 217z m221-444h96l-96-192v192z m0 5l-1 109v108l216 0v-34c-3 1-6 2-9 1-10 0-20-7-24-16l-84-168h-98z m220 88l66-88h-66l0 88z m216-93v-50l-11-28-58 78h69z m0 222v-217h-73l-129 172c-4 5-9 8-14 10v35h108 108z m-222-121l1-1 0-95h-48l47 96z m76-101l120-160c6-8 16-11 26-11v-45l-216 0v216h70z m151 0h13l-13-35v35z m0 5v217h96l-81-217h-15z m0 222l0 109v108l179 0-81-217h-98z m-5 0h-108-108v217h215l0-108 1-109z m-221 0l-216 0v217l216 0v-217z m-221-5v-108l0-109-215 0v217h108 107z m0-222v-203l-7-13h-100l-108-1 0 217 215 0z m-9-222l-24-48-182-121v169l206 0z m9-99v-9l1-108h-176l175 117z m170 321h51v-216h-159l108 216z m277-216v46c10 2 18 9 22 18l57 152h136v-216l-215 0z m81 221l81 217h53v-217h-134z m83 222l51 137v-137l-51 0z m-605-557v12l2 1c4 3 8 7 10 12l42 83h161l0-108 0-108-215 0 0 108z m220 108l216 0v-216h-216l0 108 0 108z" horiz-adv-x="1010" />
+</font>
+</defs>
+</svg>

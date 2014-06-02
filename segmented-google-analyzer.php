@@ -15,9 +15,7 @@ $sendgrid_sga_version = "0.0.1";
 define( 'SENDGRID_SGA_PATH', plugin_dir_path(__FILE__) );
 define( 'SENDGRID_SGA_FILE', __FILE__);
 
-$sendgrid_sga_table = $table_name = $wpdb->prefix . "post_sgastats";
-
-// DEFIN GOOGLE ANALYTICS VALUES
+// DEFINE GOOGLE ANALYTICS VALUES
 define( 'SENDGRID_SGA_GOOGLE_CLIENTID', '913231705346-u04d98uju3rv3ghpchc8l860kv7a9hb0.apps.googleusercontent.com');
 define( 'SENDGRID_SGA_GOOGLE_CLIENTSECRET', 'zgcraNtRK1Lvpo6RYoE4kjUA');
 define( 'SENDGRID_SGA_GOOGLE_REDIRECTURI', 'urn:ietf:wg:oauth:2.0:oob' );
@@ -28,19 +26,28 @@ require_once(SENDGRID_SGA_PATH . "inc/lib/google/Google_Client.php");
 require_once(SENDGRID_SGA_PATH . "inc/lib/google/contrib/Google_AnalyticsService.php");
 
 // CREATE GOOGLE ANALYTICS CLIENT
-// This isn't good practice, but it fits the WordPress convention, so whatever.
-$sendgrid_sga_client = new Google_Client();
-$sendgrid_sga_client->setApplicationName("Segmented Google Analyzer");
-$sendgrid_sga_client->setClientId(SENDGRID_SGA_GOOGLE_CLIENTID);
-$sendgrid_sga_client->setClientSecret(SENDGRID_SGA_GOOGLE_CLIENTSECRET);
-$sendgrid_sga_client->setRedirectUri(SENDGRID_SGA_GOOGLE_REDIRECTURI);
-$sendgrid_sga_client->setScopes(array(SENDGRID_SGA_GOOGLE_SCOPE));
+
+function sendgrid_sga_get_analytics_client () {
+	$sendgrid_sga_client = new Google_Client();
+	$sendgrid_sga_client->setApplicationName("Segmented Google Analyzer");
+	$sendgrid_sga_client->setClientId(SENDGRID_SGA_GOOGLE_CLIENTID);
+	$sendgrid_sga_client->setClientSecret(SENDGRID_SGA_GOOGLE_CLIENTSECRET);
+	$sendgrid_sga_client->setRedirectUri(SENDGRID_SGA_GOOGLE_REDIRECTURI);
+	$sendgrid_sga_client->setScopes(array(SENDGRID_SGA_GOOGLE_SCOPE));
+	return $sendgrid_sga_client;
+}
+
 
 // SET DEFAULTS
 
+function sendgrid_sga_get_table () {
+	global $wpdb;
+	return $wpdb->prefix . "post_sgastats";
+}
+
 register_activation_hook( __FILE__, 'sendgrid_sga_activate' );
 function sendgrid_sga_activate() {
-	global $sendgrid_sga_table;
+	$sendgrid_sga_table = sendgrid_sga_get_table();
 
 	if(!get_option("sendgrid_sga_activated")){
 		update_option("sendgrid_sga_activated", true);
@@ -49,9 +56,10 @@ function sendgrid_sga_activate() {
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	$sql = "CREATE TABLE $sendgrid_sga_table (
-		stats_id BIGINT(20) NOT NULL AUTO_INCREMENT,
-		post_id BIGINT(20) NOT NULL,
+		stats_id BIGINT NOT NULL AUTO_INCREMENT,
+		post_id BIGINT NOT NULL,
 		done TINYINT(1) DEFAULT 0 NOT NULL,
+		visits INT(9) DEFAULT 0 NOT NULL,
 		visitors INT(9) DEFAULT 0 NOT NULL,
 		pageviews INT(9) DEFAULT 0 NOT NULL,
 		avg_time_on_page SMALLINT(5) DEFAULT 0 NOT NULL,
@@ -80,7 +88,10 @@ function sendgrid_sga_page ($pagename, $can = 'activate_plugins'){
 		wp_die( __('You do not have sufficient permissions to access this page.') );
 	}
 
-	global $wpdb, $sendgrid_sga_client, $sendgrid_sga_table;
+	global $wpdb;
+
+	$sendgrid_sga_table = sendgrid_sga_get_table();
+	$sendgrid_sga_client = sendgrid_sga_get_analytics_client();
 
 	include(SENDGRID_SGA_PATH . "inc/screens/$pagename.php");
 
@@ -91,12 +102,17 @@ function sendgrid_sga_settings_page() {
 	sendgrid_sga_page('settings');
 }
 
+function sendgrid_sga_debug_page() {
+	sendgrid_sga_page('debug');
+}
+
 function sendgrid_sga_leaderboard_page() {
 	sendgrid_sga_page('leaderboard', 'edit_posts');
 }
 
 function sendgrid_sga_leaderboard_scripts($hook) {
-	wp_enqueue_style( 'sendgrid_sga', plugin_dir_url( __FILE__ ) . '/css/style.css', array(), '1.0.0' );
+	wp_enqueue_style( 'sendgrid_sga-fontello', plugin_dir_url( __FILE__ ) . '/css/sendgrid_sga-icon.css', array(), '1.0.0' );
+	wp_enqueue_style( 'sendgrid_sga', plugin_dir_url( __FILE__ ) . '/css/style.css', array('sendgrid_sga-fontello'), '1.0.0' );
 
     if( $hook != 'toplevel_page_segmented-google-analyzer')
         return;
@@ -111,6 +127,7 @@ function sendgrid_sga_leaderboard_scripts($hook) {
 
     wp_enqueue_script( 'filesaver', plugin_dir_url( __FILE__ ) . '/js/vendor/FileSaver.min.js', array(), '1.0.0' );
     wp_enqueue_script( 'table2CSV', plugin_dir_url( __FILE__ ) . '/js/vendor/table2CSV.min.js', array(), '1.0.0' );
+    wp_enqueue_script( 'tablesorter', plugin_dir_url( __FILE__ ) . '/js/vendor/jquery.tablesorter.min.js', array('jquery'), '1.0.0' );
 }
 add_action( 'admin_enqueue_scripts', 'sendgrid_sga_leaderboard_scripts' );
 
@@ -121,11 +138,14 @@ function sendgrid_sga_create_menu() {
 	//create new top-level menu
 	$leaderboard_page = add_menu_page('Google Analyzer Leaderboard', 'Google Analyzer', 'edit_posts', 'segmented-google-analyzer', 'sendgrid_sga_leaderboard_page', plugins_url('img/icon.png', __FILE__) );
 	$settings_page = add_submenu_page('segmented-google-analyzer', 'Google Analyzer > Settings', 'Settings', 'activate_plugins', 'segmented-google-analyzer/settings', 'sendgrid_sga_settings_page');
+	if(WP_DEBUG){
+		$debug_page = add_submenu_page('segmented-google-analyzer', 'Google Analyzer > Debug', 'Debug', 'activate_plugins', 'segmented-google-analyzer/debug', 'sendgrid_sga_debug_page');
+	}	
 }
 
 // MEAT OF THE PLUGIN
 
-// Every day, check for week old posts, if they are a week old, log the number
+// Every day, check for week old posts
 add_action( 'wp', 'sendgrid_sga_schedule' );
 function sendgrid_sga_schedule () {
 	if ( ! wp_next_scheduled( 'sendgrid_sga_analyzeposts_hook' ) ) {
@@ -137,10 +157,20 @@ add_action( 'sendgrid_sga_analyzeposts_hook', 'sendgrid_sga_analyzeposts' );
 
 function sendgrid_sga_analyzeposts($posts = false) {
 
-	global $wpdb, $sendgrid_sga_client, $sendgrid_sga_table;
+	global $wpdb, $debug_page;
 
+	$sendgrid_sga_table = sendgrid_sga_get_table();
+	$sendgrid_sga_client = sendgrid_sga_get_analytics_client();
 	$access_token = get_option("sendgrid_sga_accesstoken");
 	$profile_id = get_option("sendgrid_sga_profile");
+
+	if(!($access_token && $profile_id)){
+		return false;
+	}
+
+	if(!$sendgrid_sga_client){
+		return false;
+	}
 
 	$sendgrid_sga_client->setAccessToken($access_token);
 	$analytics = new Google_AnalyticsService($sendgrid_sga_client);
@@ -174,15 +204,20 @@ function sendgrid_sga_analyzeposts($posts = false) {
 
 	if ( $posts ) {
 		$site_url = get_site_url();
+		$prepend_url = get_option("sendgrid_sga_prepend_url"); 
 		foreach ($posts as $post_id) {
 			$post = get_post( $post_id );
 
 			// Generate the post URL in the way Google Analytics will understand.
 			$post_url = get_permalink($post_id);
 			if(strpos($post_url, $site_url) === 0){
-				$post_path = substr($post_url, strlen($site_url));
+				$post_path = $prepend_url . substr($post_url, strlen($site_url));
 			}
-		
+
+			if(SENDGRID_SGA_DEBUG_PAGE) {
+				echo $post_path . "\r\n";
+			}
+
 			// Determine the dates to observe
 			$post_publishing_date = substr($post->post_date_gmt,0,10);
 			$post_observation_end = strtotime("+6days", strtotime($post->post_date_gmt));
