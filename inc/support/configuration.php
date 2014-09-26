@@ -13,6 +13,16 @@
 				</td>
 			</tr>
 		</table>
+		<h2>API</h2>
+		<table class="form-table" style="clear: left; width: auto;">
+			<tr valign="top">
+				<th scope="row"><label for="apikey" id="apikeylabel">API Key</label></th>
+				<td>
+					<input name="apikey" type="text" id="apikey" aria-labelledby="apikeylabel" value="<?php echo get_option("sendgrid_sga_apikey") ?>" />
+					<label for="apikey" class="description">Using this API Key you can query data from this plugin.</label>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div id="configuration" style="display: <?php echo !$configured ? "block" : "none" ?>">
 		<h3>Analytics Access</h3>

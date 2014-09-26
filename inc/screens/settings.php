@@ -37,7 +37,7 @@ Nick of SendGrid
 			update_option('sendgrid_sga_profile', $_POST['profileid']);
 			update_option('sendgrid_sga_prepend_url', $_POST['prependurl']);
 
-			
+			update_option('sendgrid_sga_apikey', $_POST['apikey']);
 
 			echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved.</strong></p></div>';
 		}
