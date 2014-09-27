@@ -2,12 +2,18 @@
 
 require_once(SENDGRID_SGA_PATH . "inc/support/leaderboard.php");
 function sendgrid_sga_data_api () {
+	header("Content-Type: application/json");
+
+	if($_POST['api_key'] != get_option("sendgrid_sga_apikey") ) {
+		$output =  array("error" => true, "message" => "Unauthenticated.");
+		echo json_encode( $output );
+		die();
+	}
+
 	$period_start = create_start_time($_POST['period_start'], true);
 	$period_end =  create_end_time($_POST['period_end'], true);
 
 	create_table($period_start, $period_end);
-
-	header("Content-Type: application/json");
 
 	$output =  array("error" => true, "message" => "Unknown error.");
 	$body = array();
