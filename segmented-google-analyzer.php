@@ -5,12 +5,12 @@ Plugin URI: http://wordpress.org/extend/plugins/segmented-google-analyzer
 Description: Segment Google Analytics to create things like leaderboards.
 Author: nquinlan
 Author URI: http://nicholasquinlan.com/
-Version: 0.0.1
+Version: 0.0.2
 Text Domain: segmented-google-analyzer
 License: MIT
 */
 
-$sendgrid_sga_version = "0.0.1";
+$sendgrid_sga_version = "0.0.2";
 
 define( 'SENDGRID_SGA_PATH', plugin_dir_path(__FILE__) );
 define( 'SENDGRID_SGA_FILE', __FILE__);
