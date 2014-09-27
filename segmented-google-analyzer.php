@@ -143,6 +143,12 @@ function sendgrid_sga_create_menu() {
 	}	
 }
 
+// Expose API
+
+add_action( 'wp_ajax_sendgrid_sga_data', 'sendgrid_sga_data_api' );
+add_action( 'wp_ajax_nopriv_sendgrid_sga_data', 'sendgrid_sga_data_api' );
+require_once(SENDGRID_SGA_PATH . "inc/support/leaderboard-api.php");
+
 // MEAT OF THE PLUGIN
 
 // Every day, check for week old posts
