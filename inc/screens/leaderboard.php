@@ -1,5 +1,5 @@
 <?php
-	include(SENDGRID_SGA_PATH . "inc/support/leaderboard.php");
+	require_once(SENDGRID_SGA_PATH . "inc/support/leaderboard.php");
 
 	$period_start = create_start_time($_GET['period_start'], true);
 	$period_end =  create_end_time($_GET['period_end'], true);
@@ -57,30 +57,31 @@
 		</thead>
 		<tbody>
 			<?php foreach ($top_users as $rank => $user_info) : ?>
+			<?php $formatted_user_info = format_user_info($user_info); ?>
 			<tr>
 				<td>
 					<?php echo ($rank + 1); ?>
 				</td>
 				<td>
-					<?php echo get_userdata($user_info->post_author)->display_name; ?>
+					<?php echo $formatted_user_info["post_author"]; ?>
 				</td>
 				<td>
-					<?php echo time_format($user_info->mantime); ?>
+					<?php echo $formatted_user_info["mantime"]; ?>
 				</td>
 				<td>
-					<?php echo number_format($user_info->visits); ?>
+					<?php echo $formatted_user_info["visits"]; ?>
 				</td>
 				<td>
-					<?php echo number_format($user_info->pageviews); ?>
+					<?php echo $formatted_user_info["pageviews"]; ?>
 				</td>
 				<td>
-					<?php echo time_format($user_info->avg_time_on_page); ?>
+					<?php echo $formatted_user_info["avg_time_on_page"]; ?>
 				</td>
 				<td>
-					<?php echo round($user_info->entrance_rate*100, 2) . "%"; ?>
+					<?php echo $formatted_user_info["entrance_rate"]; ?>
 				</td>
 				<td>
-					<?php echo round($user_info->exit_rate*100, 2) . "%"; ?>
+					<?php echo $formatted_user_info["exit_rate"]; ?>
 				</td>
 			</tr>
 			<?php endforeach; ?>
@@ -122,30 +123,31 @@
 		</thead>
 		<tbody>
 			<?php foreach ($top_posts as $rank => $post_info) : ?>
+			<?php $formatted_post_info = format_post_info($post_info); ?>
 			<tr>
 				<td>
 					<?php echo ($rank + 1); ?>
 				</td>
 				<td>
-					<a href="<?php echo $post_info->guid; ?>"><?php echo $post_info->post_title; ?></a> by <?php echo get_userdata($post_info->post_author)->display_name; ?>
+					<a href="<?php echo $formatted_post_info["guid"]; ?>"><?php echo  $formatted_post_info["post_title"]; ?></a> by <?php echo  $formatted_post_info["post_author"]; ?>
 				</td>
 				<td>
-					<?php echo time_format($post_info->mantime); ?>
+					<?php echo $formatted_post_info["mantime"]; ?>
 				</td>
 				<td>
-					<?php echo number_format($post_info->visits); ?>
+					<?php echo $formatted_post_info["visits"]; ?>
 				</td>
 				<td>
-					<?php echo number_format($post_info->pageviews); ?>
+					<?php echo $formatted_post_info["pageviews"]; ?>
 				</td>
 				<td>
-					<?php echo time_format($post_info->avg_time_on_page); ?>
+					<?php echo $formatted_post_info["avg_time_on_page"]; ?>
 				</td>
 				<td>
-					<?php echo round($post_info->entrance_rate*100, 2) . "%"; ?>
+					<?php echo $formatted_post_info["entrance_rate"]; ?>
 				</td>
 				<td>
-					<?php echo round($post_info->exit_rate*100, 2) . "%"; ?>
+					<?php echo $formatted_post_info["exit_rate"]; ?>
 				</td>
 			</tr>
 			<?php endforeach; ?>

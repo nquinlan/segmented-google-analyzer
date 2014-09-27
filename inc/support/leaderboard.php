@@ -93,3 +93,42 @@
 		);
 		return $top_posts;
 	}
+
+	function format_user_info ($user_info) {
+			$formatted_user_info = array();
+			$formatted_user_info["post_author"] = get_userdata($user_info->post_author)->display_name;
+			$formatted_user_info["mantime"] =  time_format($user_info->mantime);
+			$formatted_user_info["visits"] =  number_format($user_info->visits);
+			$formatted_user_info["pageviews"] =  number_format($user_info->pageviews);
+			$formatted_user_info["avg_time_on_page"] =  time_format($user_info->avg_time_on_page);
+			$formatted_user_info["entrance_rate"] =  round($user_info->entrance_rate*100, 2) . "%";
+			$formatted_user_info["exit_rate"] =  round($user_info->exit_rate*100, 2) . "%";
+
+			return $formatted_user_info;
+	}
+
+	function format_post_info ($post_info) {
+			$formatted_post_info = array();
+			$formatted_post_info["guid"] = $post_info->guid;
+			$formatted_post_info["post_title"] = $post_info->post_title;
+			$formatted_post_info["post_author"] = get_userdata($post_info->post_author)->display_name;
+			$formatted_post_info["mantime"] = time_format($post_info->mantime);
+			$formatted_post_info["visits"] = number_format($post_info->visits);
+			$formatted_post_info["pageviews"] = number_format($post_info->pageviews);
+			$formatted_post_info["avg_time_on_page"] = time_format($post_info->avg_time_on_page);
+			$formatted_post_info["entrance_rate"] = round($post_info->entrance_rate*100, 2) . "%";
+			$formatted_post_info["exit_rate"] = round($post_info->exit_rate*100, 2) . "%";
+
+			return $formatted_post_info;
+	}
+
+	function get_post_author ($user_author_info) {
+		$post_author = get_userdata($user_author_info);
+		$author = array(
+			"display_name" => $post_author->display_name,
+			"name" => $post_author->name,
+			"first_name" => $post_author->first_name,
+			"last_name" => $post_author->last_name
+		);
+		return $author;
+	}
