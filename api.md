@@ -10,7 +10,7 @@ Segmented Google Analyzer provides data about posts over their first week of lif
     + action (required, string, `sendgrid_sga_data`) ... Must be `sendgrid_sga_data`
     + api_key (required, string) ... API key set through the Plugin's Backend.
     + period\_start (required, date, `2014-01-15`) ... The start of the period you wish to examine. _Formatted YYYY-MM-DD._
-    + end\_start (required, date, `2014-01-31`) ... The end of the period you wish to examine. _Formatted YYYY-MM-DD._
+    + period\_end (required, date, `2014-01-31`) ... The end of the period you wish to examine. _Formatted YYYY-MM-DD._
     + data (required, string, `users`) ... The type of data you wish to get, this may either be `users` or `posts`
 
 ### User Data [POST]
