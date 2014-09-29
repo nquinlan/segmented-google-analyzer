@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://sendgrid.com/blog/wp-admin
+HOST: https://yourblog.com/wp-admin
 
 # Segmented Google Analyzer
 Segmented Google Analyzer provides data about posts over their first week of life.
